@@ -1,23 +1,94 @@
 const knex = require('../../database');
+const mealTableName = 'meal';
+const reservationTableName = 'reservation';
 
 const selectAllMealsQuery = () => {
-  return knex('meals').select('*');
+  return knex(mealTableName);
 };
 
 const addNewMealQuery = (newMealData) => {
-  return knex('meals').insert(newMealData).into('meals');
+  return knex(mealTableName).insert(newMealData).into(mealTableName);
 };
 
 const getMealById = (mealId) => {
-  return knex('meals').select('*').where({ id: mealId });
+  return knex(mealTableName).select('*').where({ id: mealId });
 };
 
 const updateMeal = (mealId, updatedMealBody) => {
-  return knex('meals').where({ id: mealId }).update(updatedMealBody);
+  return knex(mealTableName).where({ id: mealId }).update(updatedMealBody);
 };
 
 const deleteMeal = (mealId, deletedMealBody) => {
-  return knex('meals').where({ id: mealId }).del(deletedMealBody);
+  return knex(mealTableName).where({ id: mealId }).del(deletedMealBody);
 };
 
-module.exports = { selectAllMealsQuery, addNewMealQuery, getMealById, updateMeal, deleteMeal };
+const getReviewByMeal = (mealId) => {
+  return knex(mealTableName).join('reviews', 'reviews.meal_id', '=', `${mealTableName}.id`).where('meal_id', '=', mealId);
+};
+
+const filterByQuery = (query) => {
+  const limit = query.limit;
+  const sortKey = query.sortKey;
+  const sortDir = query.sortDir ? query.sortDir : 'asc';
+  const title = query.title;
+  const dateAfter = query.dateAfter;
+  const dateBefore = query.dateBefore;
+  const maxPrice = query.maxPrice;
+  const availableReservations = query.availableReservations;
+
+  let q = knex(mealTableName);
+
+  if (title) {
+    q.where('title', 'like', `%${title}%`);
+  }
+
+  if (dateAfter) {
+    q.where('when', '>', `${dateAfter}`);
+  }
+
+  if (dateBefore) {
+    q.where('when', '<', `${dateBefore}`);
+  }
+
+  if (maxPrice) {
+    q.where('price', '<=', maxPrice);
+  }
+
+  if (sortKey /* && sortKey === 'when' || sortKey === 'max_reservations', sortKey === 'price' */) {
+    q.orderBy(sortKey, sortDir);
+  }
+
+  if (limit) {
+    q.limit(limit);
+  }
+
+  if (availableReservations) {
+    q.select(
+      `${mealTableName}.id as mealID`,
+      `${reservationTableName}.id as reservationID`,
+      `${reservationTableName}.number_of_guests`,
+      `${mealTableName}.max_reservations`,
+      `${mealTableName}.price`,
+      `${mealTableName}.when`
+    ).join(reservationTableName, `${reservationTableName}.meal_id`, '=', `${mealTableName}.id`);
+  }
+  console.log(q.toString());
+  return q;
+};
+
+const getManyByIDs = (mealIdsArray) => {
+  return knex(mealTableName).whereIn('id', mealIdsArray)
+}
+
+
+module.exports = {
+  selectAllMealsQuery,
+  addNewMealQuery,
+  getMealById,
+  updateMeal,
+  deleteMeal,
+  getReviewByMeal,
+
+  filterByQuery,
+  getManyByIDs
+};
