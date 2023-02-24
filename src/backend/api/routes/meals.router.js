@@ -3,8 +3,8 @@ const express = require("express");
 const router = express.Router();
 const knex = require("../../database");
 const mealsController = require('../controllers/meals.controller')
-
-router.get('/', mealsController.getAllMeals);
+/* 
+router.get('/', mealsController.getAllMeals); */
 
 router.post('/', mealsController.postNewMeal);
 
@@ -14,7 +14,9 @@ router.put('/:id', mealsController.updateMealById);
 
 router.delete('/:id', mealsController.deleteMeal);
 
+router.get('/:meal_id/reviews', mealsController.getReviewByMeal);
 
+router.get('/', mealsController.getFilteredMeal);
 
 
 

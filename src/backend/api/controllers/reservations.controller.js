@@ -2,7 +2,7 @@ const reservationsService = require('../services/reservations.services');
 
 const getAllReservations = async (request, response) => {
   try {
-    const reservations = await reservationsService.selectAllQuery();
+    const reservations = await reservationsService.selectAllReservationsQuery();
 
     return response.json(reservations);
   } catch (error) {
