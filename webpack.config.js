@@ -7,6 +7,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const outputDirectory = 'dist';
 
 module.exports = {
+  target: 'web',
+  cache: false,
   entry: ['babel-polyfill', './src/client/index.js'],
   output: {
     path: path.join(__dirname, outputDirectory),
@@ -38,6 +40,8 @@ module.exports = {
     extensions: ['*', '.js', '.jsx'],
   },
   devServer: {
+    hot: false,
+    liveReload: true,
     static: '/',
     historyApiFallback: true,
     port: parseInt(process.env.CLIENT_PORT, 10),
