@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.meals-container {
+  margin: 20px;
+}
+
+.meal-container {
+  padding: 10px;
+}
