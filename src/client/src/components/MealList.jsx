@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import mealsAPI from '../api/meals';
+import Meal from "./Meal";
 
 export default function MealList() {
   const [meals, setMeals] = useState([]);
@@ -12,13 +13,12 @@ export default function MealList() {
     }
     fetchData();
   }, []);
+
   return (
-    <div className='meals-container'>
+    <div className='meals-container' >
       {meals.map((meal) => (
-        <div className='meal-container' key={meal.id}>
-          <h1>{meal.title}</h1>
-          <p>{meal.description}</p>
-          <h3>${meal.price}</h3>
+        <div key={meal.id}>
+            <Meal meal={meal}/>
         </div>
       ))}
     </div>

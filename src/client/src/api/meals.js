@@ -7,4 +7,10 @@ const getAll = async () => {
   return meals.data
 };
 
-export default { getAll };
+const getById = async (id) => {
+  const meals = await axios.get(`${rootHost}/${id}`);
+  
+  return meals.data
+};
+
+export default { getAll, getById };
