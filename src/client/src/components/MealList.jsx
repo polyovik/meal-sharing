@@ -7,9 +7,12 @@ export default function MealList() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await mealsAPI.getAll();
-      console.log(res);
-      setMeals(res);
+      try {
+        const res = await mealsAPI.getAll();
+        setMeals(res);
+      } catch (error) {
+        return navigate('/');
+      }
     }
     fetchData();
   }, []);

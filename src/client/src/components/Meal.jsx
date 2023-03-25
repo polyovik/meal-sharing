@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Meal(params) {
-  const meal = params.meal;
+export default function Meal(props) {
+  const meal = props.meal;
 
   return (
     <div className="meal-container">
