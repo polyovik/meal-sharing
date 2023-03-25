@@ -10,8 +10,11 @@ const addNewMealQuery = (newMealData) => {
   return knex(mealTableName).insert(newMealData).into(mealTableName);
 };
 
-const getMealById = (mealId) => {
-  return knex(mealTableName).select('*').where({ id: mealId });
+const getMealById = async (mealId) => {
+  const meal = await knex(mealTableName).select('*').where({ id: mealId }).first();
+  console.log(meal);
+
+  return meal !== undefined ? meal : null
 };
 
 const updateMeal = (mealId, updatedMealBody) => {

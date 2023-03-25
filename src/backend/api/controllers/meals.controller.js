@@ -31,6 +31,10 @@ const getMealById = async (request, response) => {
 
     const meal = await mealService.getMealById(mealId);
 
+    if (meal === null) {
+      return response.status(404).json({ message: 'Meal not found' });
+    }
+
     return response.json(meal);
   } catch (error) {
     throw error;
